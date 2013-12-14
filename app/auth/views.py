@@ -6,8 +6,9 @@
 
 from flask import abort, request, jsonify, g, url_for
 from flask.ext.httpauth import HTTPBasicAuth
-from app.auth.model import User 
+from model import User
 from app import app
+from app.database import Model, db_session
 
 auth = HTTPBasicAuth()
 
@@ -58,3 +59,4 @@ def get_auth_token():
 @auth.login_required
 def get_resource():
     return jsonify({ 'data': 'Hello, %s!' % g.user.username })
+
