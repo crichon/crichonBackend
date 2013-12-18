@@ -25,9 +25,10 @@ def todo(id=None):
 			POST require at least a title, also accept a description
 	"""
 	if request.method == 'POST':
+	        print request.json
 		if not request.json or not 'title' in request.json:
 			abort(400)
-		todo = Todo(request.json['title'], request.json.get('description', ""))
+		todo = Todo(request.json['title'], request.json.get('content', ""))
 		db_session.add(todo)
 		db_session.commit()
 		todo.users = [g.user]

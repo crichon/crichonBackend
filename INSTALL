@@ -1,0 +1,7 @@
+git clone https://github.com/crichon/crichonBackend.git
+cd crichonBackend
+sudo pip install requierments.txt
+python2.7 run.py
+
+use curl to try it out or a clients provided at crichonClients
+doc should soonly be available
