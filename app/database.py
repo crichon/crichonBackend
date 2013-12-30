@@ -23,25 +23,34 @@ user_content = Table('user_content', Model.metadata,
             Column('user_id', Integer, ForeignKey('users.id'))
 )
 
+tag_content = Table('tag_content', Model.metadata,
+        Column('tag_id', Integer, ForeignKey('tags.id')),
+        Column('content_id', Integer, ForeignKey('contents.id'))
+)
+
+tag_user = Table('tag_user', Model.metadata,
+        Column('tag_id', Integer, ForeignKey('tags.id')),
+        Column('user_id', Integer, ForeignKey('users.id'))
+)
+
+
+class Tag(Model):
+    __tablename__ = 'tags'
+    id = Column(Integer, primary_key=True)
+    title = Column(String)
+    description = Column(String)
+    users = relationship("User", secondary= tag_user, backref="tags")
+
 
 class Content(Model):
     __tablename__ = 'contents'
     id = Column(Integer, primary_key=True)
     discriminator = Column('type', String(50))
     users = relationship("User", secondary= user_content, backref="contents")
+    tags = relationship("Tag", secondary= tag_content, backref="contents")
     __mapper_args__ = {'polymorphic_on': discriminator}
 
-try: 
-	import app.database.tag.model.tag
-	tag_available = False
-except ImportError:
-	# log error, dev a logger
-	tag_available = False
-
-
-if tag_available:
-    tag_item = Table('tag_todo', Model.metadata,
-            Column('tag_id', Integer, ForeignKey('tags.id')),
-            Column('todo_id', Integer, ForeignKey('users.id'))
-    )
+    @classmethod
+    def by_user_and_tag(self, user, tag):
+        return self.query.filter(self.users.any(id=user), self.tags.any(title=tag)).all()
 

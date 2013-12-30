@@ -1,6 +1,6 @@
 from sqlalchemy import Boolean, ForeignKey, Column, Integer, String
 from sqlalchemy.orm import relationship, backref
-from app.database import Content, user_content 
+from app.database import Content, user_content, tag_content
 
 
 class Todo(Content):
@@ -11,6 +11,7 @@ class Todo(Content):
     text = Column(String)
     done = Column(Boolean)
     todo_users = relationship("User", secondary= user_content, backref="todos")
+    todo_tag = relationship("Tag", secondary= tag_content, backref="todos")
 
     @property
     def serealize(self):

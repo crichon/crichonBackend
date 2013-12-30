@@ -30,7 +30,6 @@ def todo(id=None):
 			abort(400)
 		todo = Todo(request.json['title'], request.json.get('content', ""))
 		db_session.add(todo)
-		db_session.commit()
 		todo.users = [g.user]
 		db_session.commit()
 		return jsonify(ok=todo.serealize)
@@ -71,20 +70,18 @@ def todos(id):
 	else:
 		abort(400)
 
-
-@app.route('/api/todo/<string:query>', methods=['GET'])
+@app.route('/api/todo/tag/<string:tag>', methods=['GET'])
 @auth.login_required
-def todo_filter(query):
-    pass
-
-
-@app.route('/api/todo/tags')
-@auth.login_required
-def tags():
-	pass
+def tags(tag):
+	return jsonify(todos=[item.serealize for item in Todo.by_user_and_tag(g.user.id, tag)]) 
+	#pass
 	
 @app.route('/api/todo/share/<int:id>', methods=[])
 @auth.login_required
 def share(id=None):
 	pass
 
+@app.route('/api/todo/<string:query>', methods=['GET'])
+@auth.login_required
+def todo_filter(query):
+    pass
