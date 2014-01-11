@@ -10,8 +10,9 @@ class Todo(Content):
     title = Column(String(32), unique = True)
     text = Column(String)
     done = Column(Boolean)
-    todo_users = relationship("User", secondary= user_content, backref="todos")
-    todo_tag = relationship("Tag", secondary= tag_content, backref="todos")
+    # does not work as I wanted, I would rather not redeclare relationship but I have to find a way to get todos backref
+    todo_users = relationship("User", secondary= user_content, backref="todos", viewonly=True)
+    todo_tag = relationship("Tag", secondary= tag_content, backref="todos", viewonly=True)
 
     @property
     def serealize(self):

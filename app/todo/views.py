@@ -25,7 +25,6 @@ def todo(id=None):
 			POST require at least a title, also accept a description
 	"""
 	if request.method == 'POST':
-	        print request.json
 		if not request.json or not 'title' in request.json:
 			abort(400)
 		todo = Todo(request.json['title'], request.json.get('content', ""))
@@ -52,8 +51,6 @@ def todos(id):
 	if not todo:
 		abort(400)
 	elif request.method == 'PATCH':
-		print todo
-		print request.json
 	   	# uggly, how to factorise ?
 		if not request.json or not 'content' in request.json or not 'done' in request.json or not 'title' in request.json:
 			abort(400)
